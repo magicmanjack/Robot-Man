@@ -1,0 +1,36 @@
+Multiple angle "Tower-defense" type game. It is the future, and the robot man must defend the city from bad people.
+Bad people try to get into the city by hiding on the vehicles coming into the city. The robot man must detect them fast
+and stomp em' dead. Stomping the innocent will result in cutting off vital supplies into the city.
+
+Textures are shown as 4* the original size in the 600x600 square window. 
+
+Dimensions of cells is equal to 60 * 0.9^n :
+
+--------
+n = 4
+--------
+n = 3
+--------
+
+n = 2
+
+--------
+
+n = 1
+
+--------
+
+n = 0
+
+--------
+
+The Y coordinate of any cell:
+
+	int yPos = 600;
+	for(int i = 0; i < numCells; i++) {
+		yPos -= (60 * std::pow(0.9, i));
+		cellAt(i).yPos = yPos; // unless viewed from the opposite direction which would be cellAt((numCells-1) - i)
+	}
+	//this position should be stored instead of recalculated every render cycle.
+
+
