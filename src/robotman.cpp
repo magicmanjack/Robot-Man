@@ -48,7 +48,11 @@ int main(int argc, char** argv) {
 		}
 		
 		if(canRender) {
+			SDL_SetRenderDrawColor(rr, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+			SDL_RenderClear(rr);
+			//Clears the screen to black.
 			render();
+			SDL_RenderPresent(rr);
 			frames++;
 			canRender = false;
 		}
@@ -60,6 +64,7 @@ int main(int argc, char** argv) {
 			frames = 0;
 		}
 	}
+	
 	SDL_Quit();
 	return 0;
 }
