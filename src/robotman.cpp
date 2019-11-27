@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <windows.h>
+#include "maingame.h"
 
 const int w_width = 600, w_height = 600, desired_fps = 60;
 SDL_Window * window;
@@ -15,10 +16,11 @@ void update() {
 			closed = true;
 		}
 	}
+	MainGame::update();
 }
 
 void render() {
-	
+	MainGame::render();
 }
 
 int main(int argc, char** argv) {
@@ -27,6 +29,7 @@ int main(int argc, char** argv) {
 	}
 	window = SDL_CreateWindow("Robot Man", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, 0);
 	rr = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	MainGame::rr = rr;
 	
 	DWORD now = GetTickCount(), then = now, timer = now;
 	double millisPerUpdate = 1000.0 / desired_fps;
