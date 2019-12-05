@@ -15,6 +15,9 @@ void update() {
 		if(event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE) {
 			closed = true;
 		}
+		if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+			MainGame::eventsQueued.push_back(event);
+		}
 	}
 	MainGame::update();
 }

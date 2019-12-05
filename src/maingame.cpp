@@ -1,19 +1,51 @@
 #include "maingame.h"
 #include <cmath>
+#include <iostream>
 
+std::list<SDL_Event> MainGame::eventsQueued;
 SDL_Renderer* MainGame::rr;
 
-double rads = 0.0;
+enum ViewAngle {FROM_LEFT_SIDE, FROM_FRONT, FROM_RIGHT_SIDE};
+ViewAngle vAngle = FROM_FRONT;
+
+bool l = false, r = false, u = false, d = false;
 
 void MainGame::update() {
-	rads += 0.1;
+	while(!eventsQueued.empty()) {
+		SDL_Event e = *(eventsQueued.begin());
+			if(e.type == SDL_KEYDOWN) {
+				if(e.key.keysym.sym == SDLK_a) {
+					l = true;
+				}
+				if(e.key.keysym.sym == SDLK_d) {
+					r = true;
+				}
+				if(e.key.keysym.sym == SDLK_w) {
+					u = true;
+				}
+				if(e.key.keysym.sym == SDLK_s) {
+					d = true;
+				}
+			}
+			if(e.type == SDL_KEYUP) {
+				if(e.key.keysym.sym == SDLK_a) {
+					l = false;
+				}
+				if(e.key.keysym.sym == SDLK_d) {
+					r = false;
+				}
+				if(e.key.keysym.sym == SDLK_w) {
+					u = false;
+				}
+				if(e.key.keysym.sym == SDLK_s) {
+					d = false;
+				}
+			}
+		eventsQueued.pop_front();
+	}
+	
 }
 
 void MainGame::render() {
-	SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0xFF);
-	SDL_RenderDrawLine(rr, 300 + (sin(rads) * 50), 300 + (cos(rads) * 50), 300 - (sin(rads) * 50), 300 - (cos(rads) * 50));
-	SDL_SetRenderDrawColor(rr, 0x00, 0xFF, 0x00, 0xFF);
-	SDL_RenderDrawLine(rr, 300 + (cos(rads / 2) * 50), 300 + (sin(rads) * 50), 300 - (cos(rads / 2) * 50), 300 - (sin(rads) * 50));
-	SDL_SetRenderDrawColor(rr, 0x00, 0x00, 0xFF, 0xFF);
-	SDL_RenderDrawLine(rr, 300 + (cos(rads) * 50), 300 + (sin(rads / 3) * 50), 300 - (cos(rads) * 50), 300 - (sin(rads / 3) * 50));
+	
 }
