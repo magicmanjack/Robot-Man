@@ -1,2 +1,2 @@
-g++ -Iinclude\sdl2 src\robotman.cpp src\maingame.cpp -Llib -lmingw32 -lsdl2main -lsdl2 -o robotman.exe
+g++ -Iinclude\sdl2 src\robotman.cpp src\maingame.cpp src\player.cpp -Llib -lmingw32 -lsdl2main -lsdl2 -o robotman.exe
 PAUSE

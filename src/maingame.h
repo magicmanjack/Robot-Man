@@ -9,6 +9,7 @@ class MainGame {
 		MainGame();
 		static std::list<SDL_Event> eventsQueued;
 		static SDL_Renderer * rr;
+		static void init(SDL_Renderer* rr);
 		static void update();
 		static void render();
 };

@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 	}
 	window = SDL_CreateWindow("Robot Man", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, 0);
 	rr = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	MainGame::rr = rr;
+	MainGame::init(rr);
 	
 	DWORD now = GetTickCount(), then = now, timer = now;
 	double millisPerUpdate = 1000.0 / desired_fps;
