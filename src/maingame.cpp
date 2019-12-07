@@ -10,15 +10,10 @@ enum ViewAngle {FROM_LEFT_SIDE, FROM_FRONT, FROM_RIGHT_SIDE};
 ViewAngle vAngle;
 
 Player* p;
-bool l, r, u, d;
 
 void MainGame::init(SDL_Renderer* rr) {
 	MainGame::rr = rr;
 	p = new Player(rr);
-	l = false;
-	r = false;
-	u = false;
-	d = false;
 	vAngle = FROM_FRONT;
 }
 
@@ -27,34 +22,35 @@ void MainGame::update() {
 		SDL_Event e = *(eventsQueued.begin());
 			if(e.type == SDL_KEYDOWN) {
 				if(e.key.keysym.sym == SDLK_a) {
-					l = true;
+					p->l = true;
 				}
 				if(e.key.keysym.sym == SDLK_d) {
-					r = true;
+					p->r = true;
 				}
 				if(e.key.keysym.sym == SDLK_w) {
-					u = true;
+					p->u = true;
 				}
 				if(e.key.keysym.sym == SDLK_s) {
-					d = true;
+					p->d = true;
 				}
 			}
 			if(e.type == SDL_KEYUP) {
 				if(e.key.keysym.sym == SDLK_a) {
-					l = false;
+					p->l = false;
 				}
 				if(e.key.keysym.sym == SDLK_d) {
-					r = false;
+					p->r = false;
 				}
 				if(e.key.keysym.sym == SDLK_w) {
-					u = false;
+					p->u = false;
 				}
 				if(e.key.keysym.sym == SDLK_s) {
-					d = false;
+					p->d = false;
 				}
 			}
 		eventsQueued.pop_front();
 	}
+	
 	p->update();
 }
 
