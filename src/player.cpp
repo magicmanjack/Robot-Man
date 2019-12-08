@@ -1,5 +1,5 @@
 #include "player.h"
-#include <iostream>
+#include <cmath>
 
 int index = 0;
 int animIndex = 0;
@@ -24,16 +24,23 @@ Player::Player(SDL_Renderer* rr) {
 	surface = SDL_LoadBMP("res/player_2_left.bmp");
 	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
 	textures[3] = SDL_CreateTextureFromSurface(rr, surface);
-	surface = SDL_LoadBMP("res/player_1_right.bmp");
+	surface = SDL_LoadBMP("res/player_1_up.bmp");
 	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
 	textures[4] = SDL_CreateTextureFromSurface(rr, surface);
-	surface = SDL_LoadBMP("res/player_2_right.bmp");
+	surface = SDL_LoadBMP("res/player_2_up.bmp");
 	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
 	textures[5] = SDL_CreateTextureFromSurface(rr, surface);
+	surface = SDL_LoadBMP("res/player_1_right.bmp");
+	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+	textures[6] = SDL_CreateTextureFromSurface(rr, surface);
+	surface = SDL_LoadBMP("res/player_2_right.bmp");
+	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+	textures[7] = SDL_CreateTextureFromSurface(rr, surface);
 	l = false;
 	r = false;
 	u = false;
 	d = false;
+	flying = false;
 	xVel = 0;
 	yVel = 0;
 	xAcc = 0.25;
@@ -48,35 +55,40 @@ void Player::update() {
 	}
 	if(l) {
 		index = 2;
-		xVel -= xAcc;
+		xVel -= xAcc * flying;
 		if(xVel <= -1 * max_x_vel) {
 			xVel = -1 * max_x_vel;
 		}
 	}
 	if(r) {
-		index = 4;
-		xVel += xAcc;
+		index = 6;
+		xVel += xAcc * flying;
 		if(xVel >= max_x_vel) {
 			xVel = max_x_vel;
 		}
 	}
 	if(u) {
-		index = 0;
-		yVel -= yAcc;
+		index = 4;
+		yVel -= yAcc * flying;
 		if(yVel <= -1 * max_y_vel) {
 			yVel = -1 * max_y_vel;
 		}
 	}
 	if(d) {
 		index = 0;
-		yVel += yAcc;
+		yVel += yAcc * flying;
 		if(yVel >= max_y_vel) {
 			yVel = max_y_vel;
 		}
 	}
-	//continue with adding velocity to rectangles position.
-	rect.x += xVel;
-	rect.y += yVel;
+	if(!flying) {
+		xVel *= 0.9;
+		yVel *= 0.9;	
+	}
+	double accurateXpos = static_cast<double>(rect.x) + xVel;
+	double accurateYpos = static_cast<double>(rect.y) + yVel;
+	rect.x = round(accurateXpos);
+	rect.y = round(accurateYpos);
 }
 
 void Player::render(SDL_Renderer* rr) {

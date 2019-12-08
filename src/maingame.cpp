@@ -33,6 +33,9 @@ void MainGame::update() {
 				if(e.key.keysym.sym == SDLK_s) {
 					p->d = true;
 				}
+				if(e.key.keysym.sym == SDLK_SPACE) {
+					p->flying = true;
+				}
 			}
 			if(e.type == SDL_KEYUP) {
 				if(e.key.keysym.sym == SDLK_a) {
@@ -46,6 +49,9 @@ void MainGame::update() {
 				}
 				if(e.key.keysym.sym == SDLK_s) {
 					p->d = false;
+				}
+				if(e.key.keysym.sym == SDLK_SPACE) {
+					p->flying = false;
 				}
 			}
 		eventsQueued.pop_front();

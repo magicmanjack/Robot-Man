@@ -6,9 +6,9 @@
 class Player {
 	public:
 		SDL_Rect rect;
-		SDL_Texture* textures[6];
+		SDL_Texture* textures[8];
 		
-		bool l, r, u, d;
+		bool l, r, u, d, flying;
 		Player(SDL_Renderer * rr);
 		
 		void update();
