@@ -7,14 +7,14 @@ std::list<SDL_Event> MainGame::eventsQueued;
 SDL_Renderer* MainGame::rr;
 
 Player* p;
-int mapOffsetX, mapOffsetY;
+int offsetX, offsetY;
 SDL_Rect mapRect;
 
 void MainGame::init(SDL_Renderer* rr) {
 	MainGame::rr = rr;
 	p = new Player(rr);
-	mapOffsetX = 0;
-	mapOffsetY = -40;
+	offsetX = 0;
+	offsetY = -40;
 	//
 	mapRect.x = 0;
 	mapRect.y = 0;
@@ -43,13 +43,19 @@ void MainGame::update() {
 					p->flying = true;
 				}
 				if(e.key.keysym.sym == SDLK_1) {
-					
+					p->vp = Player::FROM_LEFT;
+					offsetY = 0;
+					offsetX = 0;
 				}
 				if(e.key.keysym.sym == SDLK_2) {
-					
+					p->vp = Player::FROM_FRONT;
+					offsetX = 0;
+					offsetY = -40;
 				}
 				if(e.key.keysym.sym == SDLK_3) {
-					
+					p->vp = Player::FROM_RIGHT;
+					offsetY = 0;
+					offsetX = 0;
 				}
 			}
 			if(e.type == SDL_KEYUP) {
@@ -72,11 +78,12 @@ void MainGame::update() {
 		eventsQueued.pop_front();
 	}
 	p->update();
-	p->rect.x -= mapOffsetX;
-	p->rect.y -= mapOffsetY;
-	
-	mapRect.x = 0 - mapOffsetX;
-	mapRect.y = 0 - mapOffsetY;
+	p->rect.x -= offsetX;
+	p->rect.y -= offsetY;
+	p->collisionRect.x -= offsetX;
+	p->collisionRect.y -= offsetY;
+	mapRect.x = 0 - offsetX;
+	mapRect.y = 0 - offsetY;
 }
 
 void MainGame::render() {

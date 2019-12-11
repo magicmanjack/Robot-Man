@@ -15,7 +15,7 @@ class Player {
 		bool l, r, u, d, flying;
 		Player(SDL_Renderer * rr);
 		
-		enum vPoint {FROM_FRONT, FROM_LEFT, FROM_RIGHT};
+		enum vPoint {FROM_FRONT = 0, FROM_LEFT = -2, FROM_RIGHT = 2};
 		vPoint vp = FROM_FRONT;
 		
 		void update();

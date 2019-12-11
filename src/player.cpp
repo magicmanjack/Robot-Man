@@ -92,14 +92,20 @@ void Player::update() {
 	xCoord += xVel;
 	yCoord += yVel;
 	if(vp == FROM_LEFT) {
-		
+		rect.x = round(yCoord);
+		rect.y = round((600.0 - xCoord) - rect.h);
+		collisionRect.x = round(yCoord);
+		collisionRect.y = round((600.0 - xCoord) - collisionRect.w);
 	} else if (vp == FROM_FRONT) {
 		rect.x = round(xCoord - (rect.w - collisionRect.w));
 		rect.y = round(yCoord - (rect.h - collisionRect.h));
 		collisionRect.x = round(xCoord);
-		collisionRect.y = round(yCoord + (rect.h - collisionRect.h));
+		collisionRect.y = round(yCoord);
 	} else if (vp == FROM_RIGHT) {
-		
+		rect.x = round((600.0 - yCoord) - rect.w);
+		rect.y = round(xCoord - (rect.h - collisionRect.w));
+		collisionRect.x = round((600.0 - yCoord) - rect.w);
+		collisionRect.y = round(xCoord);
 	}
 }
 
