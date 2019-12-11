@@ -54,9 +54,9 @@ int main(int argc, char** argv) {
 		}
 		
 		if(canRender) {
-			SDL_SetRenderDrawColor(rr, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+			SDL_SetRenderDrawColor(rr, 0xDF, 0xDF, 0xDF, SDL_ALPHA_OPAQUE);
 			SDL_RenderClear(rr);
-			//Clears the screen to black.
+			//Clears the screen.
 			render();
 			SDL_RenderPresent(rr);
 			frames++;

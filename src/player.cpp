@@ -1,14 +1,18 @@
 #include "player.h"
 #include <cmath>
 
-int index = 0;
-int animIndex = 0;
-
 double ticks;
+int rotOffset;
 
 Player::Player(SDL_Renderer* rr) {
-	rect.x = 250;
-	rect.y = 0;
+	index = 0;
+	animIndex = 0;
+	xCoord = 250;
+	yCoord = 0;
+	collisionRect.w = 60;
+	collisionRect.h = 60;
+	rect.x = xCoord;
+	rect.y = yCoord;
 	rect.w = 60;
 	rect.h = 100;
 	SDL_Surface* surface;
@@ -53,7 +57,7 @@ void Player::update() {
 		ticks = 0;
 		animIndex = !animIndex;
 	}
-	if(l) {
+	if(l) { 
 		index = 2;
 		xVel -= xAcc * flying;
 		if(xVel <= -1 * max_x_vel) {
@@ -85,14 +89,22 @@ void Player::update() {
 		xVel *= 0.9;
 		yVel *= 0.9;	
 	}
-	double accurateXpos = static_cast<double>(rect.x) + xVel;
-	double accurateYpos = static_cast<double>(rect.y) + yVel;
-	rect.x = round(accurateXpos);
-	rect.y = round(accurateYpos);
+	xCoord += xVel;
+	yCoord += yVel;
+	if(vp == FROM_LEFT) {
+		
+	} else if (vp == FROM_FRONT) {
+		rect.x = round(xCoord - (rect.w - collisionRect.w));
+		rect.y = round(yCoord - (rect.h - collisionRect.h));
+		collisionRect.x = round(xCoord);
+		collisionRect.y = round(yCoord + (rect.h - collisionRect.h));
+	} else if (vp == FROM_RIGHT) {
+		
+	}
 }
 
 void Player::render(SDL_Renderer* rr) {
-	SDL_SetRenderDrawColor(rr, 0x00, 0x9F, 0x00, 0x00);
-	SDL_RenderFillRect(rr, NULL);
+	SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0x00);
+	SDL_RenderDrawRect(rr, &collisionRect);
 	SDL_RenderCopy(rr, textures[index + animIndex], NULL, &rect);
 }
