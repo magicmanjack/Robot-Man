@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include "view.h"
 
 #ifndef _PLAYER_H_INCLUDED_
 #define _PLAYER_H_INCLUDED_
@@ -16,7 +17,6 @@ class Player {
 		bool l, r, u, d, flying;
 		Player(SDL_Renderer * rr);
 		
-		enum vPoint {FROM_FRONT, FROM_LEFT, FROM_RIGHT};
 		vPoint vp = FROM_FRONT;
 		void changeViewPoint(vPoint viewPoint);
 		

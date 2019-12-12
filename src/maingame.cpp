@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include "player.h"
+#include "view.h"
 
 std::list<SDL_Event> MainGame::eventsQueued;
 SDL_Renderer* MainGame::rr;
@@ -49,20 +50,20 @@ void MainGame::update() {
 					p->flying = true;
 				}
 				if(e.key.keysym.sym == SDLK_1) {
-					p->changeViewPoint(Player::FROM_LEFT);
+					p->changeViewPoint(FROM_LEFT);
 					offsetX = 0;
 					offsetY = -200;
 					vScaleFactor = 400.0 / mapH;
 				}
 				if(e.key.keysym.sym == SDLK_2) {
-					p->changeViewPoint(Player::FROM_FRONT);
+					p->changeViewPoint(FROM_FRONT);
 					offsetX = 0;
 					offsetY = -40;
 					vScaleFactor = 1;
 					
 				}
 				if(e.key.keysym.sym == SDLK_3) {
-					p->changeViewPoint(Player::FROM_RIGHT);
+					p->changeViewPoint(FROM_RIGHT);
 					offsetX = 0;
 					offsetY = -200;
 					vScaleFactor = 400.0 / mapH;
@@ -91,7 +92,7 @@ void MainGame::update() {
 		eventsQueued.pop_front();
 	}
 	p->update();
-	if(p->vp == Player::FROM_LEFT || p->vp == Player::FROM_RIGHT) {
+	if(p->vp == FROM_LEFT || p->vp == FROM_RIGHT) {
 		p->collisionRect.y = (p->collisionRect.y) * vScaleFactor;
 		p->collisionRect.h = (p->collisionRect.h) * vScaleFactor;
 		p->rect.y = (p->collisionRect.y) - ((p->rect.h) - (p->collisionRect.h));

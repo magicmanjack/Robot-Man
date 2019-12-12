@@ -12,7 +12,7 @@ Player::Player(SDL_Renderer* rr) {
 	collisionRect.w = 60;
 	collisionRect.h = 60;
 	rect.x = xCoord;
-	rect.y = yCoord;
+	rect.y = rect.y = round(yCoord - (rect.h - collisionRect.h));
 	rect.w = 60;
 	rect.h = 100;
 	SDL_Surface* surface;
@@ -65,6 +65,7 @@ Player::Player(SDL_Renderer* rr) {
 }
 
 void Player::changeViewPoint(vPoint viewPoint) {
+	// Updates the character direction.
 	if(vp != viewPoint) {
 		if(vp == FROM_LEFT) {
 			if(viewPoint == FROM_FRONT) {
@@ -202,7 +203,7 @@ void Player::update() {
 		collisionRect.x = round(yCoord);
 		collisionRect.y = round((600.0 - xCoord) - collisionRect.w);
 	} else if (vp == FROM_FRONT) {
-		rect.x = round(xCoord - (rect.w - collisionRect.w));
+		rect.x = round(xCoord);
 		rect.y = round(yCoord - (rect.h - collisionRect.h));
 		collisionRect.x = round(xCoord);
 		collisionRect.y = round(yCoord);
