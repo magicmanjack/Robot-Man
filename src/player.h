@@ -7,10 +7,11 @@ class Player {
 	public:
 		SDL_Rect rect;
 		SDL_Rect collisionRect;
-		SDL_Texture* textures[8];
+		SDL_Texture* textures[12];
 		
 		int index;
 		int animIndex;
+		int rocketsAnimIndex;
 		
 		bool l, r, u, d, flying;
 		Player(SDL_Renderer * rr);

@@ -1,12 +1,12 @@
 #include "player.h"
 #include <cmath>
 
-double ticks;
-int indexOffset;
+int ticks;
 
 Player::Player(SDL_Renderer* rr) {
 	index = 0;
 	animIndex = 0;
+	rocketsAnimIndex = 0;
 	xCoord = 250;
 	yCoord = 0;
 	collisionRect.w = 60;
@@ -40,6 +40,20 @@ Player::Player(SDL_Renderer* rr) {
 	surface = SDL_LoadBMP("res/player_2_right.bmp");
 	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
 	textures[7] = SDL_CreateTextureFromSurface(rr, surface);
+	surface = SDL_LoadBMP("res/rockets_front_1.bmp");
+	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+	textures[8] = SDL_CreateTextureFromSurface(rr, surface);
+	surface = SDL_LoadBMP("res/rockets_front_2.bmp");
+	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+	textures[9] = SDL_CreateTextureFromSurface(rr, surface);
+	surface = SDL_LoadBMP("res/rockets_side_1.bmp");
+	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+	textures[10] = SDL_CreateTextureFromSurface(rr, surface);
+	surface = SDL_LoadBMP("res/rockets_side_2.bmp");
+	SDL_SetColorKey(surface, true, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+	textures[11] = SDL_CreateTextureFromSurface(rr, surface);
+	
+	
 	l = false;
 	r = false;
 	u = false;
@@ -99,10 +113,14 @@ int Player::indexRelVp() {
 
 void Player::update() {
 	ticks++;
+	if(ticks % 15 == 0) {
+		rocketsAnimIndex = !rocketsAnimIndex; // Changes four times a second.
+	}
 	if(ticks >= 60) {
 		ticks = 0;
 		animIndex = !animIndex;
 	}
+	
 	if(l) { 
 		index = 2;
 		xVel -= xAcc * flying;
@@ -157,5 +175,14 @@ void Player::update() {
 }
 
 void Player::render(SDL_Renderer* rr) {
+	if(flying) {
+		rect.y -= 20;
+		SDL_Rect rocketsRect;
+		rocketsRect.x = rect.x;
+		rocketsRect.y = rect.y + rect.h;
+		rocketsRect.w = 60;
+		rocketsRect.h = 20;
+		SDL_RenderCopy(rr, textures[8 + (2 * (index + indexRelVp() == 2 || index + indexRelVp() == 6)) + rocketsAnimIndex], NULL, &rocketsRect);
+	}
 	SDL_RenderCopy(rr, textures[index + animIndex + indexRelVp()], NULL, &rect);
 }
