@@ -157,7 +157,5 @@ void Player::update() {
 }
 
 void Player::render(SDL_Renderer* rr) {
-	SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0x00);
-	SDL_RenderDrawRect(rr, &collisionRect);
 	SDL_RenderCopy(rr, textures[index + animIndex + indexRelVp()], NULL, &rect);
 }
