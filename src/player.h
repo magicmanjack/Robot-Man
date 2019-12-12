@@ -15,8 +15,10 @@ class Player {
 		bool l, r, u, d, flying;
 		Player(SDL_Renderer * rr);
 		
-		enum vPoint {FROM_FRONT = 0, FROM_LEFT = -2, FROM_RIGHT = 2};
+		enum vPoint {FROM_FRONT, FROM_LEFT, FROM_RIGHT};
 		vPoint vp = FROM_FRONT;
+		
+		int indexRelVp(); // The index relative to the view point.
 		
 		void update();
 		void render(SDL_Renderer* rr);

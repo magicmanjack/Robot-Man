@@ -2,7 +2,7 @@
 #include <cmath>
 
 double ticks;
-int rotOffset;
+int indexOffset;
 
 Player::Player(SDL_Renderer* rr) {
 	index = 0;
@@ -51,6 +51,52 @@ Player::Player(SDL_Renderer* rr) {
 	yAcc = 0.25;
 }
 
+int Player::indexRelVp() {
+	switch(index) {
+		case 0:
+			if(vp == FROM_FRONT) {
+				return 0;
+			}
+			if(vp == FROM_LEFT) {
+				return 6;
+			}
+			if(vp == FROM_RIGHT) {
+				return 2;
+			}
+		case 2:
+			if(vp == FROM_FRONT) {
+				return 0;
+			}
+			if(vp == FROM_LEFT) {
+				return -2;
+			}
+			if(vp == FROM_RIGHT) {
+				return 2;
+			}
+		case 4:
+			if(vp == FROM_FRONT) {
+				return 0;
+			}
+			if(vp == FROM_LEFT) {
+				return 6;
+			}
+			if(vp == FROM_RIGHT) {
+				return 2;
+			}
+		
+		case 6:
+			if(vp == FROM_FRONT) {
+				return 0;
+			}
+			if(vp == FROM_LEFT) {
+				return -2;
+			}
+			if(vp == FROM_RIGHT) {
+				return -6;
+			}
+	}
+}
+
 void Player::update() {
 	ticks++;
 	if(ticks >= 60) {
@@ -72,7 +118,7 @@ void Player::update() {
 		}
 	}
 	if(u) {
-		index = 4;
+		index = 0;
 		yVel -= yAcc * flying;
 		if(yVel <= -1 * max_y_vel) {
 			yVel = -1 * max_y_vel;
@@ -96,6 +142,10 @@ void Player::update() {
 		rect.y = round((600.0 - xCoord) - rect.h);
 		collisionRect.x = round(yCoord);
 		collisionRect.y = round((600.0 - xCoord) - collisionRect.w);
+		switch(index) {
+			case 2:
+				indexOffset = -2;
+		}
 	} else if (vp == FROM_FRONT) {
 		rect.x = round(xCoord - (rect.w - collisionRect.w));
 		rect.y = round(yCoord - (rect.h - collisionRect.h));
@@ -112,5 +162,5 @@ void Player::update() {
 void Player::render(SDL_Renderer* rr) {
 	SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0x00);
 	SDL_RenderDrawRect(rr, &collisionRect);
-	SDL_RenderCopy(rr, textures[index + animIndex], NULL, &rect);
+	SDL_RenderCopy(rr, textures[index + animIndex + indexRelVp()], NULL, &rect);
 }
