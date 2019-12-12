@@ -49,20 +49,20 @@ void MainGame::update() {
 					p->flying = true;
 				}
 				if(e.key.keysym.sym == SDLK_1) {
-					p->vp = Player::FROM_LEFT;
+					p->changeViewPoint(Player::FROM_LEFT);
 					offsetX = 0;
 					offsetY = -200;
 					vScaleFactor = 400.0 / mapH;
 				}
 				if(e.key.keysym.sym == SDLK_2) {
-					p->vp = Player::FROM_FRONT;
+					p->changeViewPoint(Player::FROM_FRONT);
 					offsetX = 0;
 					offsetY = -40;
 					vScaleFactor = 1;
 					
 				}
 				if(e.key.keysym.sym == SDLK_3) {
-					p->vp = Player::FROM_RIGHT;
+					p->changeViewPoint(Player::FROM_RIGHT);
 					offsetX = 0;
 					offsetY = -200;
 					vScaleFactor = 400.0 / mapH;

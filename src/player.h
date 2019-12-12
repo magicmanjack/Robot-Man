@@ -18,20 +18,23 @@ class Player {
 		
 		enum vPoint {FROM_FRONT, FROM_LEFT, FROM_RIGHT};
 		vPoint vp = FROM_FRONT;
-		
-		int indexRelVp(); // The index relative to the view point.
+		void changeViewPoint(vPoint viewPoint);
 		
 		void update();
 		void render(SDL_Renderer* rr);
 		
 		double xCoord, yCoord;
 		double xVel;
-		double yVel;
-		double xAcc;
-		double yAcc;
+		double getHorVel();
+		void setHorVel(double vel);
 		
-		const double max_x_vel = 4;
-		const double max_y_vel = 4;
+		double yVel;
+		double getVertVel();
+		void setVertVel(double vel);
+		
+		double acc;
+		
+		const double max_vel = 4;
 };
 
 #endif

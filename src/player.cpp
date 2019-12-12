@@ -61,53 +61,93 @@ Player::Player(SDL_Renderer* rr) {
 	flying = false;
 	xVel = 0;
 	yVel = 0;
-	xAcc = 0.25;
-	yAcc = 0.25;
+	acc = 0.25;
 }
 
-int Player::indexRelVp() {
-	switch(index) {
-		case 0:
-			if(vp == FROM_FRONT) {
-				return 0;
+void Player::changeViewPoint(vPoint viewPoint) {
+	if(vp != viewPoint) {
+		if(vp == FROM_LEFT) {
+			if(viewPoint == FROM_FRONT) {
+				index += 2;
 			}
-			if(vp == FROM_LEFT) {
-				return 6;
+			if(viewPoint == FROM_RIGHT) {
+				index += 6;
 			}
-			if(vp == FROM_RIGHT) {
-				return 2;
+		}
+		if(vp == FROM_FRONT) {
+			if(viewPoint == FROM_LEFT) {
+				index -= 2;
 			}
-		case 2:
-			if(vp == FROM_FRONT) {
-				return 0;
+			if(viewPoint == FROM_RIGHT) {
+				index += 2;
 			}
-			if(vp == FROM_LEFT) {
-				return -2;
+		}
+		if(vp == FROM_RIGHT) {
+			if(viewPoint == FROM_LEFT) {
+				index += 4;
 			}
-			if(vp == FROM_RIGHT) {
-				return 2;
+			if(viewPoint == FROM_FRONT) {
+				index += 6;
 			}
-		case 4:
-			if(vp == FROM_FRONT) {
-				return 0;
-			}
-			if(vp == FROM_LEFT) {
-				return 6;
-			}
-			if(vp == FROM_RIGHT) {
-				return 2;
-			}
-		
-		case 6:
-			if(vp == FROM_FRONT) {
-				return 0;
-			}
-			if(vp == FROM_LEFT) {
-				return -2;
-			}
-			if(vp == FROM_RIGHT) {
-				return -6;
-			}
+		}
+		if(index >= 8) {
+			index = index - 8;
+		} else if(index < 0) {
+			index = 8 + index;
+		}
+	}
+	vp = viewPoint;
+}
+
+void Player::setHorVel(double vel) {
+	//Sets the horizontal velocity regardless of it being a component of x or y.
+	if(vp == FROM_FRONT) {
+		xVel = vel;
+	}
+	if(vp == FROM_LEFT) {
+		yVel = vel;
+	}
+	if(vp == FROM_RIGHT) {
+		yVel = -vel;
+	}
+}
+
+double Player::getHorVel() {
+	//Returns horizontal velocity regardless of whether it is x or y velocity.
+	if(vp == FROM_FRONT) {
+		return xVel;	
+	}
+	if(vp == FROM_LEFT) {
+		return yVel;
+	}
+	if(vp == FROM_RIGHT) {
+		return -yVel;
+	}
+}
+
+void Player::setVertVel(double vel) {
+	//Sets the vertical velocity regardless of it being a component of x or y.
+	if(vp == FROM_FRONT) {
+		yVel = vel;
+	}
+	if(vp == FROM_LEFT) {
+		xVel = -vel;
+	}
+	if(vp == FROM_RIGHT) {
+		xVel = vel;
+	}
+}
+
+double Player::getVertVel() {
+	//Returns vertical velocity regardless of whether it is x or y velocity.
+	if(vp == FROM_FRONT) {
+		return yVel;
+	}
+	if(vp == FROM_LEFT) {
+		return -xVel;
+	}
+	if(vp == FROM_RIGHT) {
+		return xVel;
 	}
 }
 
@@ -123,30 +163,30 @@ void Player::update() {
 	
 	if(l) { 
 		index = 2;
-		xVel -= xAcc * flying;
-		if(xVel <= -1 * max_x_vel) {
-			xVel = -1 * max_x_vel;
+		setHorVel(getHorVel() - (acc * flying));
+		if(getHorVel() <= -1 * max_vel) {
+			setHorVel(-1 * max_vel);
 		}
 	}
 	if(r) {
 		index = 6;
-		xVel += xAcc * flying;
-		if(xVel >= max_x_vel) {
-			xVel = max_x_vel;
+		setHorVel(getHorVel() + (acc * flying));
+		if(getHorVel() >= max_vel) {
+			setHorVel(max_vel);
 		}
 	}
 	if(u) {
-		index = 0;
-		yVel -= yAcc * flying;
-		if(yVel <= -1 * max_y_vel) {
-			yVel = -1 * max_y_vel;
+		index = 4;
+		setVertVel(getVertVel() - (acc * flying));
+		if(getVertVel() <= -1 * max_vel) {
+			setVertVel(-1 * max_vel);
 		}
 	}
 	if(d) {
 		index = 0;
-		yVel += yAcc * flying;
-		if(yVel >= max_y_vel) {
-			yVel = max_y_vel;
+		setVertVel(getVertVel() + (acc * flying));
+		if(getVertVel() >= max_vel) {
+			setVertVel(max_vel);
 		}
 	}
 	if(!flying) {
@@ -155,7 +195,7 @@ void Player::update() {
 	}
 	xCoord += xVel;
 	yCoord += yVel;
-	collisionRect.h = rect.w;
+	collisionRect.h = rect.w; // Sets the collision box to be perfectly square.
 	if(vp == FROM_LEFT) {
 		rect.x = round(yCoord);
 		rect.y = round((600.0 - xCoord) - rect.h);
@@ -182,7 +222,7 @@ void Player::render(SDL_Renderer* rr) {
 		rocketsRect.y = rect.y + rect.h;
 		rocketsRect.w = 60;
 		rocketsRect.h = 20;
-		SDL_RenderCopy(rr, textures[8 + (2 * (index + indexRelVp() == 2 || index + indexRelVp() == 6)) + rocketsAnimIndex], NULL, &rocketsRect);
+		SDL_RenderCopy(rr, textures[8 + (2 * (index == 2 || index == 6)) + rocketsAnimIndex], NULL, &rocketsRect);
 	}
-	SDL_RenderCopy(rr, textures[index + animIndex + indexRelVp()], NULL, &rect);
+	SDL_RenderCopy(rr, textures[index + animIndex], NULL, &rect);
 }
