@@ -7,7 +7,9 @@ std::list<SDL_Event> MainGame::eventsQueued;
 SDL_Renderer* MainGame::rr;
 
 Player* p;
+double vScaleFactor; // The scale factor of the map vertically.
 int offsetX, offsetY;
+int mapX, mapY, mapW, mapH;
 SDL_Rect mapRect;
 
 void MainGame::init(SDL_Renderer* rr) {
@@ -16,11 +18,12 @@ void MainGame::init(SDL_Renderer* rr) {
 	offsetX = 0;
 	offsetY = -40;
 	//
-	mapRect.x = 0;
-	mapRect.y = 0;
-	mapRect.w = 600;
-	mapRect.h = 600;
+	mapX = 0;
+	mapY = 0;
+	mapW = 600;
+	mapH = 600;
 	//defining shape and size of map
+	vScaleFactor = 1; // The map will be scaled to the normal height.
 }
 
 void MainGame::update() {
@@ -44,18 +47,22 @@ void MainGame::update() {
 				}
 				if(e.key.keysym.sym == SDLK_1) {
 					p->vp = Player::FROM_LEFT;
-					offsetY = 0;
 					offsetX = 0;
+					offsetY = -200;
+					vScaleFactor = 400.0 / mapH;
 				}
 				if(e.key.keysym.sym == SDLK_2) {
 					p->vp = Player::FROM_FRONT;
 					offsetX = 0;
 					offsetY = -40;
+					vScaleFactor = 1;
+					
 				}
 				if(e.key.keysym.sym == SDLK_3) {
 					p->vp = Player::FROM_RIGHT;
-					offsetY = 0;
 					offsetX = 0;
+					offsetY = -200;
+					vScaleFactor = 400.0 / mapH;
 				}
 			}
 			if(e.type == SDL_KEYUP) {
@@ -78,12 +85,19 @@ void MainGame::update() {
 		eventsQueued.pop_front();
 	}
 	p->update();
+	if(p->vp == Player::FROM_LEFT || p->vp == Player::FROM_RIGHT) {
+		p->collisionRect.y = (p->collisionRect.y) * vScaleFactor;
+		p->collisionRect.h = (p->collisionRect.h) * vScaleFactor;
+		p->rect.y = (p->collisionRect.y) - ((p->rect.h) - (p->collisionRect.h));
+	}
 	p->rect.x -= offsetX;
 	p->rect.y -= offsetY;
 	p->collisionRect.x -= offsetX;
 	p->collisionRect.y -= offsetY;
-	mapRect.x = 0 - offsetX;
-	mapRect.y = 0 - offsetY;
+	mapRect.x = mapX - offsetX;
+	mapRect.y = mapY - offsetY;
+	mapRect.w = mapW;
+	mapRect.h = mapH * vScaleFactor;
 }
 
 void MainGame::render() {

@@ -137,15 +137,12 @@ void Player::update() {
 	}
 	xCoord += xVel;
 	yCoord += yVel;
+	collisionRect.h = rect.w;
 	if(vp == FROM_LEFT) {
 		rect.x = round(yCoord);
 		rect.y = round((600.0 - xCoord) - rect.h);
 		collisionRect.x = round(yCoord);
 		collisionRect.y = round((600.0 - xCoord) - collisionRect.w);
-		switch(index) {
-			case 2:
-				indexOffset = -2;
-		}
 	} else if (vp == FROM_FRONT) {
 		rect.x = round(xCoord - (rect.w - collisionRect.w));
 		rect.y = round(yCoord - (rect.h - collisionRect.h));
