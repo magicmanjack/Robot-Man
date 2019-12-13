@@ -62,42 +62,7 @@ Player::Player(SDL_Renderer* rr) {
 	xVel = 0;
 	yVel = 0;
 	acc = 0.25;
-}
-
-void Player::changeViewPoint(vPoint viewPoint) {
-	// Updates the character direction.
-	if(vp != viewPoint) {
-		if(vp == FROM_LEFT) {
-			if(viewPoint == FROM_FRONT) {
-				index += 2;
-			}
-			if(viewPoint == FROM_RIGHT) {
-				index += 6;
-			}
-		}
-		if(vp == FROM_FRONT) {
-			if(viewPoint == FROM_LEFT) {
-				index -= 2;
-			}
-			if(viewPoint == FROM_RIGHT) {
-				index += 2;
-			}
-		}
-		if(vp == FROM_RIGHT) {
-			if(viewPoint == FROM_LEFT) {
-				index += 4;
-			}
-			if(viewPoint == FROM_FRONT) {
-				index += 6;
-			}
-		}
-		if(index >= 8) {
-			index = index - 8;
-		} else if(index < 0) {
-			index = 8 + index;
-		}
-	}
-	vp = viewPoint;
+	lastVp = vp;
 }
 
 void Player::setHorVel(double vel) {
@@ -153,6 +118,39 @@ double Player::getVertVel() {
 }
 
 void Player::update() {
+	if(lastVp != vp) {
+		if(lastVp == FROM_LEFT) {
+			if(vp == FROM_FRONT) {
+				index += 2;
+			}
+			if(vp == FROM_RIGHT) {
+				index += 4;
+			}
+		}
+		if(lastVp == FROM_FRONT) {
+			if(vp == FROM_LEFT) {
+				index -= 2;
+			}
+			if(vp == FROM_RIGHT) {
+				index += 2;
+			}
+		}
+		if(lastVp == FROM_RIGHT) {
+			if(vp == FROM_LEFT) {
+				index += 4;
+			}
+			if(vp == FROM_FRONT) {
+				index += 6;
+			}
+		}
+		if(index >= 8) {
+			index = index - 8;
+		} else if(index < 0) {
+			index = 8 + index;
+		}
+		lastVp = vp;
+		// The player texture is updated if there is a change in the view point.
+	}
 	ticks++;
 	if(ticks % 15 == 0) {
 		rocketsAnimIndex = !rocketsAnimIndex; // Changes four times a second.

@@ -7,4 +7,6 @@ enum vPoint {
 	FROM_RIGHT
 };
 
+extern vPoint vp;
+
 #endif

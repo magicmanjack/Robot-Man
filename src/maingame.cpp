@@ -7,6 +7,8 @@
 std::list<SDL_Event> MainGame::eventsQueued;
 SDL_Renderer* MainGame::rr;
 
+vPoint vp = FROM_FRONT;
+
 Player* p;
 double vScaleFactor; // The scale factor of the map vertically.
 int offsetX, offsetY;
@@ -50,20 +52,20 @@ void MainGame::update() {
 					p->flying = true;
 				}
 				if(e.key.keysym.sym == SDLK_1) {
-					p->changeViewPoint(FROM_LEFT);
+					vp = FROM_LEFT;
 					offsetX = 0;
 					offsetY = -200;
 					vScaleFactor = 400.0 / mapH;
 				}
 				if(e.key.keysym.sym == SDLK_2) {
-					p->changeViewPoint(FROM_FRONT);
+					vp = FROM_FRONT;
 					offsetX = 0;
 					offsetY = -40;
 					vScaleFactor = 1;
 					
 				}
 				if(e.key.keysym.sym == SDLK_3) {
-					p->changeViewPoint(FROM_RIGHT);
+					vp = FROM_RIGHT;
 					offsetX = 0;
 					offsetY = -200;
 					vScaleFactor = 400.0 / mapH;
@@ -92,7 +94,7 @@ void MainGame::update() {
 		eventsQueued.pop_front();
 	}
 	p->update();
-	if(p->vp == FROM_LEFT || p->vp == FROM_RIGHT) {
+	if(vp == FROM_LEFT || vp == FROM_RIGHT) {
 		p->collisionRect.y = (p->collisionRect.y) * vScaleFactor;
 		p->collisionRect.h = (p->collisionRect.h) * vScaleFactor;
 		p->rect.y = (p->collisionRect.y) - ((p->rect.h) - (p->collisionRect.h));

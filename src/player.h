@@ -17,8 +17,7 @@ class Player {
 		bool l, r, u, d, flying;
 		Player(SDL_Renderer * rr);
 		
-		vPoint vp = FROM_FRONT;
-		void changeViewPoint(vPoint viewPoint);
+		vPoint lastVp;
 		
 		void update();
 		void render(SDL_Renderer* rr);
