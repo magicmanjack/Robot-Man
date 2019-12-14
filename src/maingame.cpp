@@ -12,7 +12,6 @@ vPoint vp = FROM_FRONT;
 
 Player* p;
 Map* gameMap;
-double vScaleFactor; // The scale factor of the map vertically.
 int offsetX, offsetY;
 
 bool enableDevInfo;
@@ -23,7 +22,6 @@ void MainGame::init(SDL_Renderer* rr) {
 	gameMap = new Map(rr);
 	offsetX = 0;
 	offsetY = -40;
-	vScaleFactor = 1; // The map will be scaled to the normal height.
 	enableDevInfo = false; // Enable to show useful developer information.
 }
 
@@ -50,20 +48,20 @@ void MainGame::update() {
 					vp = FROM_LEFT;
 					offsetX = 0;
 					offsetY = -200;
-					vScaleFactor = 400.0 / gameMap->h;
+					gameMap->vScaleFactor = 400.0 / gameMap->h;
 				}
 				if(e.key.keysym.sym == SDLK_2) {
 					vp = FROM_FRONT;
 					offsetX = 0;
 					offsetY = -40;
-					vScaleFactor = 1;
+					gameMap->vScaleFactor = 1;
 					
 				}
 				if(e.key.keysym.sym == SDLK_3) {
 					vp = FROM_RIGHT;
 					offsetX = 0;
 					offsetY = -200;
-					vScaleFactor = 400.0 / gameMap->h;
+					gameMap->vScaleFactor = 400.0 / gameMap->h;
 				}
 				if(e.key.keysym.sym == SDLK_BACKQUOTE) {
 					enableDevInfo = !enableDevInfo; // Toggles on and off.
@@ -89,19 +87,18 @@ void MainGame::update() {
 		eventsQueued.pop_front();
 	}
 	p->update();
+	gameMap->update(); // Updating map and map components.
 	if(vp == FROM_LEFT || vp == FROM_RIGHT) {
-		p->collisionRect.y = (p->collisionRect.y) * vScaleFactor;
-		p->collisionRect.h = (p->collisionRect.h) * vScaleFactor;
+		p->collisionRect.y = (p->collisionRect.y) * gameMap->vScaleFactor;
+		p->collisionRect.h = (p->collisionRect.h) * gameMap->vScaleFactor;
 		p->rect.y = (p->collisionRect.y) - ((p->rect.h) - (p->collisionRect.h));
 	}
 	p->rect.x -= offsetX;
 	p->rect.y -= offsetY;
 	p->collisionRect.x -= offsetX;
 	p->collisionRect.y -= offsetY;
-	gameMap->mapRect.x = (gameMap->x) - offsetX;
-	gameMap->mapRect.y = (gameMap->y) - offsetY;
-	gameMap->mapRect.w = (gameMap->w);
-	gameMap->mapRect.h = (gameMap->h) * vScaleFactor;
+	gameMap->mapRect.x -= offsetX; // Applying the x offset to the map.
+	gameMap->mapRect.y -= offsetY; // Applying the y offset to the map.
 }
 
 void MainGame::render() {

@@ -15,6 +15,10 @@ class Map {
 		Map(SDL_Renderer* rr);
 		
 		int mapTiles[10][10]; // Each number corresponds to a specific texture.
+		const int tile_width = 60; // The width of each tile.
+		const int tile_height = 60; // The height of each tile.
+		
+		double vScaleFactor; // The scale factor of the map vertically. 
 		
 		void update();
 		void render(SDL_Renderer* rr);
