@@ -12,9 +12,9 @@ class Map {
 		
 		SDL_Rect mapRect;
 		
-		Map();
+		Map(SDL_Renderer* rr);
 		
-		int mapTiles[10][10] // Each number corresponds to a specific texture.
+		int mapTiles[10][10]; // Each number corresponds to a specific texture.
 		
 		void update();
 		void render(SDL_Renderer* rr);
