@@ -25,6 +25,8 @@ class Map {
 		
 		void update();
 		void render(SDL_Renderer* rr);
+		
+		bool showTileBounds;
 };
 
 #endif

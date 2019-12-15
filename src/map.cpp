@@ -2,6 +2,7 @@
 #include <cmath>
 
 SDL_Rect tileRect; // Contains information about the dimesions of a tile and is used for rendering the tiles.
+SDL_Texture* tileTextures[7];
 
 Map::Map(SDL_Renderer* rr) {
 	x = 0;
@@ -13,6 +14,13 @@ Map::Map(SDL_Renderer* rr) {
 	mapRect.w = w;
 	mapRect.h = h;
 	vScaleFactor = 1; // The map will be scaled to the normal height.
+	showTileBounds = false; // If true, the outlines of every tile is shown. Useful for debugging.
+	tileTextures[1] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_1.bmp"));
+	tileTextures[2] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_2.bmp"));
+	tileTextures[3] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_3.bmp"));
+	tileTextures[4] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_4.bmp"));
+	tileTextures[5] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_5.bmp"));
+	tileTextures[6] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_6.bmp"));
 }
 
 void Map::update() {
@@ -32,8 +40,6 @@ void Map::update() {
 }
 
 void Map::render(SDL_Renderer* rr) {
-	SDL_SetRenderDrawColor(rr, 0x00, 0x9F, 0x00, 0xFF);
-	SDL_RenderFillRect(rr, &mapRect);
 	for(int ix = 0; ix < tiles_wide; ix++) {
 		for(int iy = 0; iy < tiles_high; iy++) {
 			tileRect.x = mapRect.x + (ix * tileRect.w);
@@ -42,10 +48,19 @@ void Map::render(SDL_Renderer* rr) {
 				tileRect.x = mapRect.x + (iy * tileRect.w);
 				tileRect.y = mapRect.y + (((tiles_wide - 1) - ix) * tileRect.h);
 			} else if(vp == FROM_RIGHT) {
-				
+				tileRect.x = mapRect.x + (((tiles_high -1) - iy) * tileRect.w);
+				tileRect.y = mapRect.y + (ix * tileRect.h);
 			}
-			SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0xFF);
-			SDL_RenderDrawRect(rr, &tileRect);
+			if(mapTiles[ix][iy] == 0) {
+				SDL_SetRenderDrawColor(rr, 0x1C, 0x71, 0x00, 0xFF);
+				SDL_RenderFillRect(rr, &tileRect);
+			} else {
+				SDL_RenderCopy(rr, tileTextures[mapTiles[ix][iy]], NULL, &tileRect);
+			}
+			if(showTileBounds) {
+				SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0xFF);
+				SDL_RenderDrawRect(rr, &tileRect);
+			}
 		}
 	}
 }

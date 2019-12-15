@@ -89,8 +89,8 @@ void MainGame::update() {
 	p->update();
 	gameMap->update(); // Updating map and map components.
 	if(vp == FROM_LEFT || vp == FROM_RIGHT) {
-		p->collisionRect.y = (p->collisionRect.y) * gameMap->vScaleFactor;
-		p->collisionRect.h = (p->collisionRect.h) * gameMap->vScaleFactor;
+		p->collisionRect.y = round((p->collisionRect.y) * gameMap->vScaleFactor);
+		p->collisionRect.h = round((p->collisionRect.h) * gameMap->vScaleFactor);
 		p->rect.y = (p->collisionRect.y) - ((p->rect.h) - (p->collisionRect.h));
 	}
 	p->rect.x -= offsetX;
@@ -99,6 +99,7 @@ void MainGame::update() {
 	p->collisionRect.y -= offsetY;
 	gameMap->mapRect.x -= offsetX; // Applying the x offset to the map.
 	gameMap->mapRect.y -= offsetY; // Applying the y offset to the map.
+	gameMap->showTileBounds = enableDevInfo;
 }
 
 void MainGame::render() {
