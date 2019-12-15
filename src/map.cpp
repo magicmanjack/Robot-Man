@@ -21,6 +21,20 @@ Map::Map(SDL_Renderer* rr) {
 	tileTextures[4] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_4.bmp"));
 	tileTextures[5] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_5.bmp"));
 	tileTextures[6] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_6.bmp"));
+	
+	SDL_RWops* file = SDL_RWFromFile("res/map.txt", "rb");
+	char mapInChars[101];
+	if(file != NULL) {
+		if(!file->read(file, mapInChars, 1, sizeof (mapInChars))) {
+			SDL_Log("map.txt could not be read or is empty");
+		} else {
+			for(int i = 0; mapInChars[i] != 0; i++) {
+				mapTiles[i - ((int)floor(i / tiles_wide) * tiles_wide)][(int)floor(i / tiles_wide)] = (int)mapInChars[i] - (int)'0';
+				SDL_Log("%d - %d", (int)mapInChars[i], (int)'0');
+			}
+		}
+		SDL_RWclose(file);	
+	}
 }
 
 void Map::update() {
