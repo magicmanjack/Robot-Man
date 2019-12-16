@@ -23,14 +23,19 @@ Map::Map(SDL_Renderer* rr) {
 	tileTextures[6] = SDL_CreateTextureFromSurface(rr, SDL_LoadBMP("res/road_6.bmp"));
 	
 	SDL_RWops* file = SDL_RWFromFile("res/map.txt", "rb");
-	char mapInChars[101];
+	char mapInChars[119];
 	if(file != NULL) {
 		if(!file->read(file, mapInChars, 1, sizeof (mapInChars))) {
 			SDL_Log("map.txt could not be read or is empty");
 		} else {
+			int j = 0;
 			for(int i = 0; mapInChars[i] != 0; i++) {
-				mapTiles[i - ((int)floor(i / tiles_wide) * tiles_wide)][(int)floor(i / tiles_wide)] = (int)mapInChars[i] - (int)'0';
-				SDL_Log("%d - %d", (int)mapInChars[i], (int)'0');
+				if((int)mapInChars[i] == 10) {
+					j++;
+				} else if((int)mapInChars[i] != 13) {
+					mapTiles[i - (j * (tiles_wide + 2))][j] = (int)mapInChars[i] - (int)'0';
+					SDL_Log("index: %d, value: %d", i, mapInChars[i]);
+				}
 			}
 		}
 		SDL_RWclose(file);	
