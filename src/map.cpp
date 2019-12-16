@@ -4,6 +4,47 @@
 SDL_Rect tileRect; // Contains information about the dimesions of a tile and is used for rendering the tiles.
 SDL_Texture* tileTextures[7];
 
+int tileValFromVp(int val) {
+	if(vp == FROM_LEFT) {
+		switch(val) {
+			case 0:
+				return 0;
+			case 1:
+				return 2;
+			case 2:
+				return 1;
+			case 3:
+				return 4;
+			case 4:
+				return 6;
+			case 5:
+				return 3;
+			case 6:
+				return 5;
+		}
+	} else if(vp == FROM_FRONT) {
+		return val;
+	} else if(vp == FROM_RIGHT) {
+		switch(val) {
+			case 0:
+				return 0;
+			case 1:
+				return 2;
+			case 2:
+				return 1;
+			case 3:
+				return 5;
+			case 4:
+				return 3;
+			case 5:
+				return 6;
+			case 6:
+				return 4;
+			
+		}
+	}
+}
+
 Map::Map(SDL_Renderer* rr) {
 	x = 0;
 	y = 0;
@@ -34,7 +75,7 @@ Map::Map(SDL_Renderer* rr) {
 					j++;
 				} else if((int)mapInChars[i] != 13) {
 					mapTiles[i - (j * (tiles_wide + 2))][j] = (int)mapInChars[i] - (int)'0';
-					SDL_Log("index: %d, value: %d", i, mapInChars[i]);
+					// The map tiles are set to what is in the file.
 				}
 			}
 		}
@@ -42,7 +83,7 @@ Map::Map(SDL_Renderer* rr) {
 	}
 }
 
-void Map::update() {
+void Map::update() { 
 	mapRect.x = x;
 	mapRect.y = y;
 	mapRect.w = w;
@@ -74,7 +115,7 @@ void Map::render(SDL_Renderer* rr) {
 				SDL_SetRenderDrawColor(rr, 0x1C, 0x71, 0x00, 0xFF);
 				SDL_RenderFillRect(rr, &tileRect);
 			} else {
-				SDL_RenderCopy(rr, tileTextures[mapTiles[ix][iy]], NULL, &tileRect);
+				SDL_RenderCopy(rr, tileTextures[tileValFromVp(mapTiles[ix][iy])], NULL, &tileRect);
 			}
 			if(showTileBounds) {
 				SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0xFF);
