@@ -7,7 +7,7 @@ Player::Player(SDL_Renderer* rr) {
 	index = 0;
 	animIndex = 0;
 	rocketsAnimIndex = 0;
-	xCoord = 250;
+	xCoord = 240;
 	yCoord = 0;
 	collisionRect.w = 60;
 	collisionRect.h = 60;
@@ -148,7 +148,6 @@ void Player::update() {
 		} else if(index < 0) {
 			index = 8 + index;
 		}
-		lastVp = vp;
 		// The player texture is updated if there is a change in the view point.
 	}
 	ticks++;

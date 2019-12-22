@@ -8,5 +8,6 @@ enum vPoint {
 };
 
 extern vPoint vp;
+extern vPoint lastVp;
 
 #endif

@@ -4,13 +4,16 @@
 #include "player.h"
 #include "view.h"
 #include "map.h"
+#include "truck.h"
 
 std::list<SDL_Event> MainGame::eventsQueued;
 SDL_Renderer* MainGame::rr;
 
 vPoint vp = FROM_FRONT;
+vPoint lastVp = vp;
 
 Player* p;
+Truck* testTruck;
 Map* gameMap;
 int offsetX, offsetY;
 
@@ -19,6 +22,9 @@ bool enableDevInfo;
 void MainGame::init(SDL_Renderer* rr) {
 	MainGame::rr = rr;
 	p = new Player(rr);
+	testTruck = new Truck(rr);
+	testTruck->xPos = 60;
+	testTruck->yPos = 540;
 	gameMap = new Map(rr);
 	offsetX = 0;
 	offsetY = -40;
@@ -87,19 +93,25 @@ void MainGame::update() {
 		eventsQueued.pop_front();
 	}
 	p->update();
+	testTruck->update();
 	gameMap->update(); // Updating map and map components.
 	if(vp == FROM_LEFT || vp == FROM_RIGHT) {
 		p->collisionRect.y = round((p->collisionRect.y) * gameMap->vScaleFactor);
 		p->collisionRect.h = round((p->collisionRect.h) * gameMap->vScaleFactor);
+		testTruck->rect.y = round((testTruck->rect.y) * gameMap->vScaleFactor) - ((testTruck->rect.h) - ((testTruck->rect.h) * gameMap->vScaleFactor)); // Adjusts rect.y according to the vScaleFactor while keeping its height the same.
 		p->rect.y = (p->collisionRect.y) - ((p->rect.h) - (p->collisionRect.h));
 	}
 	p->rect.x -= offsetX;
 	p->rect.y -= offsetY;
 	p->collisionRect.x -= offsetX;
 	p->collisionRect.y -= offsetY;
+	testTruck->rect.x -= offsetX;
+	testTruck->rect.y -= offsetY;
 	gameMap->mapRect.x -= offsetX; // Applying the x offset to the map.
 	gameMap->mapRect.y -= offsetY; // Applying the y offset to the map.
 	gameMap->showTileBounds = enableDevInfo;
+	
+	lastVp = vp;
 }
 
 void MainGame::render() {
@@ -108,5 +120,6 @@ void MainGame::render() {
 		SDL_SetRenderDrawColor(rr, 0xFF, 0x00, 0x00, 0x00);
 		SDL_RenderDrawRect(rr, &(p->collisionRect));
 	}
+	testTruck->render(rr);
 	p->render(rr);
 }
